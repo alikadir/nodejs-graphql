@@ -10,6 +10,7 @@ var schema = buildSchema(`
 
 var root = { hello: () => 'Hello world!' };
 
+
 var app = express();
 app.use('/graphql', graphqlHTTP({
     schema: schema,
