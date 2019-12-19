@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node express-graphql"
+    "start-express": "nodemon -r esm express-graphql",
+    "start-pure": "nodemon -r esm pure-graphql",
+    "client": "node -r esm client"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +14,10 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^2.0.2"
   }
 }

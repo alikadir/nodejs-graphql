@@ -1,14 +1,23 @@
-var express = require('express');
-var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
+import express from 'express'
+import graphqlHTTP from 'express-graphql'
+import { buildSchema } from 'graphql';
+
 
 var schema = buildSchema(`
   type Query {
-    hello: String
+    name: String,
+    id: Int,
+    age: Int,
+    isMale: Boolean
   }
 `);
 
-var root = { hello: () => 'Hello world!' };
+var root = {
+  name: () => 'Ali Kadir',
+  id: 2,
+  age: 34,
+  isMale: true
+};
 
 var app = express();
 app.use('/graphql', graphqlHTTP({

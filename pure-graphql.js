@@ -1,4 +1,4 @@
-var { graphql, buildSchema } = require('graphql');
+import { graphql, buildSchema } from 'graphql'
 
 var schema = buildSchema(`
   type Query {
