@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon -r esm server",
-    "client": "node -r esm client"
+    "apollo-server": "nodemon --inspect-brk -r esm apollo-server",
+    "pure-server": "nodemon --inspect-brk -r esm pure-server",
+    "client": "nodemon --inspect-brk -r esm client"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.9.14",
     "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
     "graphql": "^14.5.8"
   },
   "devDependencies": {
