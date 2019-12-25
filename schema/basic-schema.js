@@ -5,11 +5,13 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLID
 } from 'graphql';
 import postJson from '../data/posts.json';
+import userJson from '../data/users.json';
 
-const status = new GraphQLEnumType({
+const StatusType = new GraphQLEnumType({
   name: 'Status',
   values: {
     New: { value: 'new' },
@@ -18,14 +20,36 @@ const status = new GraphQLEnumType({
   }
 });
 
-const post = new GraphQLObjectType({
+const UserType = new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: { type: GraphQLInt },
+    name: { type: GraphQLString },
+    userName: { type: GraphQLString },
+    email: { type: GraphQLString },
+    posts: {
+      type: GraphQLList(PostType),
+      resolve(parent) {
+        return postJson.filter(x => x.userId == parent.id);
+      }
+    }
+  })
+});
+
+const PostType = new GraphQLObjectType({
   name: 'Post',
   fields: {
     id: { type: GraphQLInt },
     userId: { type: new GraphQLNonNull(GraphQLInt) },
     title: { type: GraphQLString, description: 'title is describe to post js' },
     body: { type: GraphQLString },
-    status: { type: status }
+    status: { type: StatusType },
+    user: {
+      type: UserType,
+      resolve(parent) {
+        return userJson.find(x => x.id == parent.userId);
+      }
+    }
   }
 });
 
@@ -34,29 +58,35 @@ export default new GraphQLSchema({
     name: 'Query',
     fields: {
       posts: {
-        type: GraphQLList(post),
+        type: GraphQLList(PostType),
         resolve() {
           return postJson;
         }
       },
+      users: {
+        type: GraphQLList(UserType),
+        resolve() {
+          return userJson;
+        }
+      },
       singlePost: {
-        type: post,
-        args: { id: { type: GraphQLInt } },
+        type: PostType,
+        args: { id: { type: GraphQLID } },
         resolve(parent, args) {
           return postJson.find(x => x.id == args.id);
         }
       },
       userPosts: {
-        type: GraphQLList(post),
-        args: { userId: { type: GraphQLInt } },
+        type: GraphQLList(PostType),
+        args: { userId: { type: GraphQLID } },
         resolve(parent, args) {
           return postJson.filter(x => x.userId == args.userId);
         }
       },
       getPostsByStatus: {
-        type: GraphQLList(post),
+        type: GraphQLList(PostType),
         args: {
-          status: { type: status }
+          status: { type: StatusType }
         },
         resolve(parent, args) {
           return postJson.filter(x => x.status == args.status);

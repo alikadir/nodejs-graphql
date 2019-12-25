@@ -3,7 +3,7 @@ import { ApolloServer, gql } from 'apollo-server-express';
 
 import postJson from './data/posts.json';
 
-// String, Int, Float, Boolean, [], ID = String identity
+// String, Int, Float, Boolean, [], ID = String or Int
 // String! is a non-nullable string.
 
 var typeDefs = gql`
@@ -32,6 +32,7 @@ var typeDefs = gql`
     sum(num1: Int, num2: Int): Float
   }
 `;
+
 // mutation is delete, update, create
 // query is only select, that even to be a function
 
@@ -40,9 +41,10 @@ var typeDefs = gql`
 var resolvers = {
   Query: {
     posts: () => postJson,
-    singlePost: args => postJson.find(x => x.id == args.id),
-    userPosts: args => postJson.filter(x => x.userId == args.userId),
-    getPostsByStatus: args => postJson.filter(x => x.status == args.status)
+    singlePost: (parent, args) => postJson.find(x => x.id == args.id),
+    userPosts: (parent, args) => postJson.filter(x => x.userId == args.userId),
+    getPostsByStatus: (parent, args) =>
+      postJson.filter(x => x.status == args.status)
   },
   Mutation: {
     sum: (parent, args) => args.num1 / args.num2
@@ -54,4 +56,6 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 server.applyMiddleware({ app });
 
-app.listen(4000, () => console.log(`Now browse to http://localhost:4000${server.graphqlPath}`));
+app.listen(4000, () =>
+  console.log(`Now browse to http://localhost:4000${server.graphqlPath}`)
+);
