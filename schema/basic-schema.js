@@ -65,7 +65,7 @@ export default new GraphQLSchema({
       },
       users: {
         type: GraphQLList(UserType),
-        resolve() {
+        resolve(parent, args, context, info) {
           return userJson;
         }
       },

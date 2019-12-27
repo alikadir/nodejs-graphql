@@ -10,6 +10,7 @@
       "name": "Pure Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "pure-server"],
+      "restart": true,
       "port": 9229,
       "skipFiles": ["<node_internals>/**"]
     },
@@ -19,8 +20,10 @@
       "name": "Apollo Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "apollo-server"],
+      "restart": true,
       "port": 9229,
-      "skipFiles": ["<node_internals>/**"]
+      "skipFiles": ["<node_internals>/**"],
+      "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "type": "node",
@@ -28,6 +31,7 @@
       "name": "Client",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "client"],
+      "restart": true,
       "port": 9229,
       "skipFiles": ["<node_internals>/**"]
     }

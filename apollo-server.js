@@ -2,16 +2,27 @@ import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
 
 import postJson from './data/posts.json';
+import userJson from './data/users.json';
+import { fieldMapResolver } from './utilities/graphql-utility';
 
 // String, Int, Float, Boolean, [], ID = String or Int
 // String! is a non-nullable string.
 
-var typeDefs = gql`
+const typeDefs = gql`
   enum Status {
     new
     updated
     deleted
   }
+
+  type User {
+    id: Int
+    name: String
+    userName: String
+    email: String
+    posts: [Post]
+  }
+
   type Post {
     id: Int
     userId: Int!
@@ -21,13 +32,17 @@ var typeDefs = gql`
     title: String
     body: String
     status: Status
+    user: User
   }
+
   type Query {
     posts: [Post]
-    singlePost(id: Int): Post
-    userPosts(userId: Int): [Post]
+    users: [User]
+    singlePost(id: ID): Post
+    userPosts(userId: ID): [Post]
     getPostsByStatus(status: Status): [Post]
   }
+
   type Mutation {
     sum(num1: Int, num2: Int): Float
   }
@@ -38,16 +53,25 @@ var typeDefs = gql`
 
 // mutation has two parameter, first parameter (maybe) parent second parameter args
 
-var resolvers = {
+const resolvers = {
   Query: {
-    posts: () => postJson,
-    singlePost: (parent, args) => postJson.find(x => x.id == args.id),
-    userPosts: (parent, args) => postJson.filter(x => x.userId == args.userId),
-    getPostsByStatus: (parent, args) =>
-      postJson.filter(x => x.status == args.status)
+    posts: (parent, args, context, info) => postJson,
+    users: (parent, args, context, info) => {
+      console.log(fieldMapResolver(info.fieldNodes[0]));
+      return userJson;
+    },
+    singlePost: (parent, args, context, info) => postJson.find(x => x.id == args.id),
+    userPosts: (parent, args, context, info) => postJson.filter(x => x.userId == args.userId),
+    getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status)
+  },
+  User: {
+    posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id)
+  },
+  Post: {
+    user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId)
   },
   Mutation: {
-    sum: (parent, args) => args.num1 / args.num2
+    sum: (parent, args, context, info) => args.num1 / args.num2
   }
 };
 
@@ -56,6 +80,4 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 server.applyMiddleware({ app });
 
-app.listen(4000, () =>
-  console.log(`Now browse to http://localhost:4000${server.graphqlPath}`)
-);
+app.listen(4000, () => console.log(`Now browse to http://localhost:4000${server.graphqlPath}`));
