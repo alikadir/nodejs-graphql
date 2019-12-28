@@ -5,6 +5,8 @@ import { fieldMapResolver } from './utilities/graphql-utility';
 
 import postJson from './data/posts.json';
 import userJson from './data/users.json';
+import commentJson from './data/comments.json';
+import { createComplexityLimitRule } from 'graphql-validation-complexity';
 
 // String, Int, Float, Boolean, [], ID = String or Int
 // String! is a non-nullable string.
@@ -22,6 +24,18 @@ const typeDefs = gql`
     userName: String!
     email: String
     posts: [Post]
+    comments: [Comment]
+  }
+
+  type Comment {
+    id: Int
+    userId: Int
+    postId: Int
+    subject: String
+    body: String
+    createDate: String
+    user: User
+    post: Post
   }
 
   type Post {
@@ -34,11 +48,13 @@ const typeDefs = gql`
     body: String
     status: Status
     user: User
+    comments: [Comment]
   }
 
   type Query {
     posts: [Post]
     users: [User]
+    comments: [Comment]
     singlePost(id: ID): Post
     userPosts(userId: ID): [Post]
     getPostsByStatus(status: Status): [Post]
@@ -57,8 +73,10 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     posts: (parent, args, context, info) => postJson,
+    comments: (parent, args, context, info) => commentJson,
     users: (parent, args, context, info) => {
       console.log(fieldMapResolver(info.fieldNodes[0]));
+      console.log(context.isMobile);
       return userJson;
     },
     singlePost: (parent, args, context, info) => postJson.find(x => x.id == args.id),
@@ -66,10 +84,16 @@ const resolvers = {
     getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status)
   },
   User: {
-    posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id)
+    posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id),
+    comments: (parent, args, context, info) => commentJson.filter(x => x.userId == parent.id)
   },
   Post: {
-    user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId)
+    user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId),
+    comments: (parent, args, context, info) => commentJson.filter(x => x.postId == parent.id)
+  },
+  Comment: {
+    user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId),
+    post: (parent, args, context, info) => postJson.find(x => x.id == parent.postId)
   },
   Mutation: {
     sum: (parent, args, context, info) => args.num1 / args.num2
@@ -77,7 +101,16 @@ const resolvers = {
 };
 
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: context => {
+    // added isMobile field to context object
+    context.isMobile = context.req.headers['user-agent'].includes('iphone');
+    return context;
+  },
+  validationRules: [createComplexityLimitRule(1000)] // default 1000
+});
 
 server.applyMiddleware({ app });
 

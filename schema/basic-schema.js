@@ -12,6 +12,7 @@ import { fieldMapResolver } from '../utilities/graphql-utility';
 
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
+import commentJson from '../data/comments.json';
 
 const StatusType = new GraphQLEnumType({
   name: 'Status',
@@ -34,13 +35,42 @@ const UserType = new GraphQLObjectType({
       resolve(parent, args, context, info) {
         return postJson.filter(x => x.userId == parent.id);
       }
+    },
+    comments: {
+      type: GraphQLList(CommentType),
+      resolve(parent, args, context, info) {
+        return comment.filter(x => x.userId == parent.id);
+      }
+    }
+  })
+});
+
+const CommentType = new GraphQLObjectType({
+  name: 'Comment',
+  fields: () => ({
+    id: { type: GraphQLInt },
+    userId: { type: GraphQLInt },
+    PostId: { type: GraphQLInt },
+    subject: { type: GraphQLString },
+    body: { type: GraphQLString },
+    post: {
+      type: PostType,
+      resolve(parent, args, context, info) {
+        return postJson.find(x => x.id == parent.PostId);
+      }
+    },
+    user: {
+      type: UserType,
+      resolve(parent, args, context, info) {
+        return userJson.find(x => x.id == parent.userId);
+      }
     }
   })
 });
 
 const PostType = new GraphQLObjectType({
   name: 'Post',
-  fields: {
+  fields: () => ({
     id: { type: GraphQLInt },
     userId: { type: new GraphQLNonNull(GraphQLInt) },
     title: { type: GraphQLString, description: 'title is describe to post js' },
@@ -51,8 +81,14 @@ const PostType = new GraphQLObjectType({
       resolve(parent, args, context, info) {
         return userJson.find(x => x.id == parent.userId);
       }
+    },
+    comments: {
+      type: GraphQLList(CommentType),
+      resolve(parent, args, context, info) {
+        return commentJson.filter(x => x.postId == parent.id);
+      }
     }
-  }
+  })
 });
 
 export default new GraphQLSchema({
@@ -69,6 +105,7 @@ export default new GraphQLSchema({
         type: GraphQLList(UserType),
         resolve(parent, args, context, info) {
           console.log(fieldMapResolver(info.fieldNodes[0]));
+          console.log(context.isMobile);
           return userJson;
         }
       },
