@@ -1,9 +1,10 @@
-import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
+import express from 'express';
+
+import { fieldMapResolver } from './utilities/graphql-utility';
 
 import postJson from './data/posts.json';
 import userJson from './data/users.json';
-import { fieldMapResolver } from './utilities/graphql-utility';
 
 // String, Int, Float, Boolean, [], ID = String or Int
 // String! is a non-nullable string.
@@ -18,7 +19,7 @@ const typeDefs = gql`
   type User {
     id: Int
     name: String
-    userName: String
+    userName: String!
     email: String
     posts: [Post]
   }

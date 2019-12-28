@@ -1,0 +1,206 @@
+{
+  "fieldName": "users",
+  "fieldNodes": [
+    {
+      "kind": "Field",
+      "name": { "kind": "Name", "value": "users", "loc": { "start": 4, "end": 9 } },
+      "arguments": [],
+      "directives": [],
+      "selectionSet": {
+        "kind": "SelectionSet",
+        "selections": [
+          {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id", "loc": { "start": 16, "end": 18 } },
+            "arguments": [],
+            "directives": [],
+            "loc": { "start": 16, "end": 18 }
+          },
+          {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "userName", "loc": { "start": 23, "end": 31 } },
+            "arguments": [],
+            "directives": [],
+            "loc": { "start": 23, "end": 31 }
+          },
+          {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "name", "loc": { "start": 36, "end": 40 } },
+            "arguments": [],
+            "directives": [],
+            "loc": { "start": 36, "end": 40 }
+          },
+          {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "email", "loc": { "start": 45, "end": 50 } },
+            "arguments": [],
+            "directives": [],
+            "loc": { "start": 45, "end": 50 }
+          },
+          {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "posts", "loc": { "start": 55, "end": 60 } },
+            "arguments": [],
+            "directives": [],
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [
+                {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "id", "loc": { "start": 69, "end": 71 } },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": { "start": 69, "end": 71 }
+                },
+                {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "title", "loc": { "start": 78, "end": 83 } },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": { "start": 78, "end": 83 }
+                },
+                {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "body", "loc": { "start": 90, "end": 94 } },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": { "start": 90, "end": 94 }
+                }
+              ],
+              "loc": { "start": 61, "end": 100 }
+            },
+            "loc": { "start": 55, "end": 100 }
+          }
+        ],
+        "loc": { "start": 10, "end": 104 }
+      },
+      "loc": { "start": 4, "end": 104 }
+    }
+  ],
+  "returnType": "[User]",
+  "parentType": "Query",
+  "path": { "key": "users" },
+  "schema": {
+    "__validationErrors": [],
+    "__allowedLegacyNames": [],
+    "_queryType": "Query",
+    "_mutationType": "Mutation",
+    "_directives": ["@cacheControl", "@skip", "@include", "@deprecated"],
+    "_typeMap": {
+      "Query": "Query",
+      "Post": "Post",
+      "Int": "Int",
+      "String": "String",
+      "Status": "Status",
+      "User": "User",
+      "ID": "ID",
+      "Mutation": "Mutation",
+      "Float": "Float",
+      "__Schema": "__Schema",
+      "__Type": "__Type",
+      "__TypeKind": "__TypeKind",
+      "Boolean": "Boolean",
+      "__Field": "__Field",
+      "__InputValue": "__InputValue",
+      "__EnumValue": "__EnumValue",
+      "__Directive": "__Directive",
+      "__DirectiveLocation": "__DirectiveLocation",
+      "CacheControlScope": "CacheControlScope",
+      "Upload": "Upload"
+    },
+    "_possibleTypeMap": {},
+    "_implementations": {},
+    "_extensionsEnabled": true
+  },
+  "fragments": {},
+  "operation": {
+    "kind": "OperationDefinition",
+    "operation": "query",
+    "variableDefinitions": [],
+    "directives": [],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [
+        {
+          "kind": "Field",
+          "name": { "kind": "Name", "value": "users", "loc": { "start": 4, "end": 9 } },
+          "arguments": [],
+          "directives": [],
+          "selectionSet": {
+            "kind": "SelectionSet",
+            "selections": [
+              {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id", "loc": { "start": 16, "end": 18 } },
+                "arguments": [],
+                "directives": [],
+                "loc": { "start": 16, "end": 18 }
+              },
+              {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "userName", "loc": { "start": 23, "end": 31 } },
+                "arguments": [],
+                "directives": [],
+                "loc": { "start": 23, "end": 31 }
+              },
+              {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "name", "loc": { "start": 36, "end": 40 } },
+                "arguments": [],
+                "directives": [],
+                "loc": { "start": 36, "end": 40 }
+              },
+              {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "email", "loc": { "start": 45, "end": 50 } },
+                "arguments": [],
+                "directives": [],
+                "loc": { "start": 45, "end": 50 }
+              },
+              {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "posts", "loc": { "start": 55, "end": 60 } },
+                "arguments": [],
+                "directives": [],
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [
+                    {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "id", "loc": { "start": 69, "end": 71 } },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": { "start": 69, "end": 71 }
+                    },
+                    {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "title", "loc": { "start": 78, "end": 83 } },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": { "start": 78, "end": 83 }
+                    },
+                    {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "body", "loc": { "start": 90, "end": 94 } },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": { "start": 90, "end": 94 }
+                    }
+                  ],
+                  "loc": { "start": 61, "end": 100 }
+                },
+                "loc": { "start": 55, "end": 100 }
+              }
+            ],
+            "loc": { "start": 10, "end": 104 }
+          },
+          "loc": { "start": 4, "end": 104 }
+        }
+      ],
+      "loc": { "start": 0, "end": 106 }
+    },
+    "loc": { "start": 0, "end": 106 }
+  },
+  "variableValues": {},
+  "cacheControl": { "cacheHint": { "maxAge": 0 } }
+}

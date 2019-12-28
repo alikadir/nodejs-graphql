@@ -11,7 +11,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "pure-server"],
       "restart": true,
-      "port": 9229,
+      "port": 9999,
       "skipFiles": ["<node_internals>/**"]
     },
     {
@@ -21,7 +21,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "apollo-server"],
       "restart": true,
-      "port": 9229,
+      "port": 8888,
       "skipFiles": ["<node_internals>/**"],
       "internalConsoleOptions": "openOnSessionStart"
     },
@@ -32,7 +32,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "client"],
       "restart": true,
-      "port": 9229,
+      "port": 7777,
       "skipFiles": ["<node_internals>/**"]
     }
   ]

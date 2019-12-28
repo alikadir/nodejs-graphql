@@ -8,6 +8,8 @@ import {
   GraphQLEnumType,
   GraphQLID
 } from 'graphql';
+import { fieldMapResolver } from '../utilities/graphql-utility';
+
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
 
@@ -25,11 +27,11 @@ const UserType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLInt },
     name: { type: GraphQLString },
-    userName: { type: GraphQLString },
+    userName: { type: new GraphQLNonNull(GraphQLString) },
     email: { type: GraphQLString },
     posts: {
       type: GraphQLList(PostType),
-      resolve(parent) {
+      resolve(parent, args, context, info) {
         return postJson.filter(x => x.userId == parent.id);
       }
     }
@@ -46,7 +48,7 @@ const PostType = new GraphQLObjectType({
     status: { type: StatusType },
     user: {
       type: UserType,
-      resolve(parent) {
+      resolve(parent, args, context, info) {
         return userJson.find(x => x.id == parent.userId);
       }
     }
@@ -59,27 +61,28 @@ export default new GraphQLSchema({
     fields: {
       posts: {
         type: GraphQLList(PostType),
-        resolve() {
+        resolve(parent, args, context, info) {
           return postJson;
         }
       },
       users: {
         type: GraphQLList(UserType),
         resolve(parent, args, context, info) {
+          console.log(fieldMapResolver(info.fieldNodes[0]));
           return userJson;
         }
       },
       singlePost: {
         type: PostType,
         args: { id: { type: GraphQLID } },
-        resolve(parent, args) {
+        resolve(parent, args, context, info) {
           return postJson.find(x => x.id == args.id);
         }
       },
       userPosts: {
         type: GraphQLList(PostType),
         args: { userId: { type: GraphQLID } },
-        resolve(parent, args) {
+        resolve(parent, args, context, info) {
           return postJson.filter(x => x.userId == args.userId);
         }
       },
@@ -88,7 +91,7 @@ export default new GraphQLSchema({
         args: {
           status: { type: StatusType }
         },
-        resolve(parent, args) {
+        resolve(parent, args, context, info) {
           return postJson.filter(x => x.status == args.status);
         }
       }
