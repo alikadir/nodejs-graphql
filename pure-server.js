@@ -21,4 +21,4 @@ app.use(
   }))
 );
 
-app.listen(3000, () => console.log('Now browse to http://localhost:3000/graphql'));
+app.listen(3000, () => console.log(' 🚀 Now browse to http://localhost:3000/graphql'));

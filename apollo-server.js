@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server-express';
 import { createComplexityLimitRule } from 'graphql-validation-complexity';
 import express from 'express';
+import fetch from 'node-fetch';
 
 import { fieldMapResolver } from './utilities/graphql-utility';
 import externalSchema from './schema/sdl-schema';
@@ -17,12 +18,13 @@ const typeDefs = externalSchema;
 const resolvers = {
   Query: {
     posts: (parent, args, context, info) => postJson,
-    comments: (parent, args, context, info) => commentJson,
     users: (parent, args, context, info) => {
       console.log(fieldMapResolver(info.fieldNodes[0]));
       console.log(context.isMobile);
       return userJson;
     },
+    comments: (parent, args, context, info) => commentJson,
+    todos: async (parent, args, context, info) => await (await fetch('https://jsonplaceholder.typicode.com/todos')).json(),
     singlePost: (parent, args, context, info) => postJson.find(x => x.id == args.id),
     userPosts: (parent, args, context, info) => postJson.filter(x => x.userId == args.userId),
     getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status),
@@ -30,7 +32,8 @@ const resolvers = {
   },
   User: {
     posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id),
-    comments: (parent, args, context, info) => commentJson.filter(x => x.userId == parent.id)
+    comments: (parent, args, context, info) => commentJson.filter(x => x.userId == parent.id),
+    todos: async (parent, args, context, info) => await (await fetch(`https://jsonplaceholder.typicode.com/todos?userId=${parent.id}`)).json()
   },
   Post: {
     user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId),
@@ -59,4 +62,4 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-app.listen(4000, () => console.log(`Now browse to http://localhost:4000${server.graphqlPath}`));
+app.listen(4000, () => console.log(` 🚀 Now browse to http://localhost:4000${server.graphqlPath}`));

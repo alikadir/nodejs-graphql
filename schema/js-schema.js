@@ -11,6 +11,7 @@ import {
   GraphQLBoolean
 } from 'graphql';
 import { fieldMapResolver } from '../utilities/graphql-utility';
+import fetch from 'node-fetch';
 
 import commentJson from '../data/comments.json';
 import postJson from '../data/posts.json';
@@ -25,14 +26,30 @@ const StatusType = new GraphQLEnumType({
   }
 });
 
+const TodoType = new GraphQLObjectType({
+  name: 'Todo',
+  fields: () => ({
+    id: { type: GraphQLInt },
+    userId: { type: GraphQLInt },
+    title: { type: GraphQLString },
+    completed: { type: GraphQLBoolean },
+    user: {
+      type: UserType,
+      resolve(parent, args, context, info) {
+        return userJson.find(x => x.id == parent.userId);
+      }
+    }
+  })
+});
+
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLInt },
     name: { type: new GraphQLNonNull(GraphQLString) },
-    userName: { type: GraphQLString, deprecationReason: "You should use 'nick' instead of userName field" },
+    userName: { type: GraphQLString, deprecationReason: 'You should use "nick" instead of userName field' },
     nick: { type: GraphQLString },
-    email: { type: GraphQLString },
+    email: { type: GraphQLString, deprecationReason: ' ' },
     isMale: { type: GraphQLBoolean },
     salary: { type: GraphQLFloat },
     posts: {
@@ -45,6 +62,12 @@ const UserType = new GraphQLObjectType({
       type: GraphQLList(CommentType),
       resolve(parent, args, context, info) {
         return comment.filter(x => x.userId == parent.id);
+      }
+    },
+    todos: {
+      type: GraphQLList(TodoType),
+      async resolve(parent, args, context, info) {
+        return await (await fetch(`https://jsonplaceholder.typicode.com/todos?userId=${parent.id}`)).json();
       }
     }
   })
@@ -104,6 +127,13 @@ export default new GraphQLSchema({
         type: GraphQLList(PostType),
         resolve(parent, args, context, info) {
           return postJson;
+        }
+      },
+
+      todos: {
+        type: GraphQLList(TodoType),
+        async resolve(parent, args, context, info) {
+          return await (await fetch('https://jsonplaceholder.typicode.com/todos')).json();
         }
       },
       users: {

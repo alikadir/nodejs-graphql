@@ -10,16 +10,25 @@ export default gql`
     deleted
   }
 
+  type Todo {
+    id: Int
+    userId: Int
+    title: String
+    completed: Boolean
+    user: User
+  }
+
   type User {
     id: Int
     name: String!
     userName: String @deprecated(reason: "You should use 'nick' instead of userName field")
     nick: String
-    email: String
+    email: String @deprecated
     isMale: Boolean
     salary: Float
     posts: [Post]
     comments: [Comment]
+    todos: [Todo]
   }
 
   type Comment {
@@ -50,6 +59,7 @@ export default gql`
     posts: [Post]
     users: [User]
     comments: [Comment]
+    todos: [Todo]
     singlePost(id: ID): Post
     userPosts(userId: ID): [Post]
     getPostsByStatus(status: Status): [Post]
