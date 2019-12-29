@@ -6,13 +6,15 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLEnumType,
-  GraphQLID
+  GraphQLID,
+  GraphQLFloat,
+  GraphQLBoolean
 } from 'graphql';
 import { fieldMapResolver } from '../utilities/graphql-utility';
 
+import commentJson from '../data/comments.json';
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
-import commentJson from '../data/comments.json';
 
 const StatusType = new GraphQLEnumType({
   name: 'Status',
@@ -27,9 +29,12 @@ const UserType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLInt },
-    name: { type: GraphQLString },
-    userName: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    userName: { type: GraphQLString, deprecationReason: "You should use 'nick' instead of userName field" },
+    nick: { type: GraphQLString },
     email: { type: GraphQLString },
+    isMale: { type: GraphQLBoolean },
+    salary: { type: GraphQLFloat },
     posts: {
       type: GraphQLList(PostType),
       resolve(parent, args, context, info) {
@@ -73,7 +78,7 @@ const PostType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLInt },
     userId: { type: new GraphQLNonNull(GraphQLInt) },
-    title: { type: GraphQLString, description: 'title is describe to post js' },
+    title: { type: GraphQLString, description: 'title is describe to post custom description' },
     body: { type: GraphQLString },
     status: { type: StatusType },
     user: {
@@ -130,6 +135,16 @@ export default new GraphQLSchema({
         },
         resolve(parent, args, context, info) {
           return postJson.filter(x => x.status == args.status);
+        }
+      },
+      getUsersBetweenSalary: {
+        type: GraphQLList(UserType),
+        args: {
+          max: { type: GraphQLFloat },
+          min: { type: GraphQLFloat }
+        },
+        resolve(parent, args, context, info) {
+          return userJson.filter(x => x.salary > args.min && x.salary < args.max);
         }
       }
     }

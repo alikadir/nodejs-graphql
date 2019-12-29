@@ -1,8 +1,8 @@
+import { createComplexityLimitRule } from 'graphql-validation-complexity';
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
-import { createComplexityLimitRule } from 'graphql-validation-complexity';
 
-import externalSchema from './schema/basic-schema';
+import externalSchema from './schema/js-schema';
 
 var app = express();
 
@@ -17,7 +17,7 @@ app.use(
       req,
       res
     },
-    validationRules: [createComplexityLimitRule(5000)]
+    validationRules: [createComplexityLimitRule(5000)] // default 1000
   }))
 );
 

@@ -1,74 +1,18 @@
 import { ApolloServer, gql } from 'apollo-server-express';
+import { createComplexityLimitRule } from 'graphql-validation-complexity';
 import express from 'express';
 
 import { fieldMapResolver } from './utilities/graphql-utility';
+import externalSchema from './schema/sdl-schema';
 
+import commentJson from './data/comments.json';
 import postJson from './data/posts.json';
 import userJson from './data/users.json';
-import commentJson from './data/comments.json';
-import { createComplexityLimitRule } from 'graphql-validation-complexity';
 
-// String, Int, Float, Boolean, [], ID = String or Int
-// String! is a non-nullable string.
-
-const typeDefs = gql`
-  enum Status {
-    new
-    updated
-    deleted
-  }
-
-  type User {
-    id: Int
-    name: String
-    userName: String!
-    email: String
-    posts: [Post]
-    comments: [Comment]
-  }
-
-  type Comment {
-    id: Int
-    userId: Int
-    postId: Int
-    subject: String
-    body: String
-    createDate: String
-    user: User
-    post: Post
-  }
-
-  type Post {
-    id: Int
-    userId: Int!
-    """
-    title is describe the post
-    """
-    title: String
-    body: String
-    status: Status
-    user: User
-    comments: [Comment]
-  }
-
-  type Query {
-    posts: [Post]
-    users: [User]
-    comments: [Comment]
-    singlePost(id: ID): Post
-    userPosts(userId: ID): [Post]
-    getPostsByStatus(status: Status): [Post]
-  }
-
-  type Mutation {
-    sum(num1: Int, num2: Int): Float
-  }
-`;
+const typeDefs = externalSchema;
 
 // mutation is delete, update, create
 // query is only select, that even to be a function
-
-// mutation has two parameter, first parameter (maybe) parent second parameter args
 
 const resolvers = {
   Query: {
@@ -81,7 +25,8 @@ const resolvers = {
     },
     singlePost: (parent, args, context, info) => postJson.find(x => x.id == args.id),
     userPosts: (parent, args, context, info) => postJson.filter(x => x.userId == args.userId),
-    getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status)
+    getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status),
+    getUsersBetweenSalary: (parent, args, context, info) => userJson.filter(x => x.salary > args.min && x.salary < args.max)
   },
   User: {
     posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id),
@@ -109,7 +54,7 @@ const server = new ApolloServer({
     context.isMobile = context.req.headers['user-agent'].includes('iphone');
     return context;
   },
-  validationRules: [createComplexityLimitRule(1000)] // default 1000
+  validationRules: [createComplexityLimitRule(5000)] // default 1000
 });
 
 server.applyMiddleware({ app });
