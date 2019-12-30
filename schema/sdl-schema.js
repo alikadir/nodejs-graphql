@@ -10,6 +10,15 @@ export default gql`
     deleted
   }
 
+  input UserInput {
+    name: String
+    userName: String
+    nick: String
+    email: String
+    isMale: Boolean
+    salary: Float
+  }
+
   type Todo {
     id: Int
     userId: Int
@@ -63,10 +72,11 @@ export default gql`
     singlePost(id: ID): Post
     userPosts(userId: ID): [Post]
     getPostsByStatus(status: Status): [Post]
-    getUsersBetweenSalary(max: Float, min: Float): [User]
+    getUsersBetweenSalary(max: Float, min: Float, ascending: Boolean): [User]
   }
 
   type Mutation {
-    sum(num1: Int, num2: Int): Float
+    divide(num1: Int, num2: Int): Float
+    createUser(input: UserInput): User
   }
 `;

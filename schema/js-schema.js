@@ -8,7 +8,8 @@ import {
   GraphQLEnumType,
   GraphQLID,
   GraphQLFloat,
-  GraphQLBoolean
+  GraphQLBoolean,
+  GraphQLInputObjectType
 } from 'graphql';
 import { fieldMapResolver } from '../utilities/graphql-utility';
 import fetch from 'node-fetch';
@@ -16,6 +17,10 @@ import fetch from 'node-fetch';
 import commentJson from '../data/comments.json';
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
+import fs from 'fs';
+
+// !! build in directives which are skip, include aren't using in javascript schema
+// only deprecated directive using as deprecationReason in javascript schema
 
 const StatusType = new GraphQLEnumType({
   name: 'Status',
@@ -50,6 +55,7 @@ const UserType = new GraphQLObjectType({
     userName: { type: GraphQLString, deprecationReason: 'You should use "nick" instead of userName field' },
     nick: { type: GraphQLString },
     email: { type: GraphQLString, deprecationReason: ' ' },
+
     isMale: { type: GraphQLBoolean },
     salary: { type: GraphQLFloat },
     posts: {
@@ -119,6 +125,18 @@ const PostType = new GraphQLObjectType({
   })
 });
 
+const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInput',
+  fields: {
+    name: { type: GraphQLString },
+    userName: { type: GraphQLString },
+    nick: { type: GraphQLString },
+    email: { type: GraphQLString },
+    isMale: { type: GraphQLBoolean },
+    salary: { type: GraphQLFloat }
+  }
+});
+
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -171,10 +189,44 @@ export default new GraphQLSchema({
         type: GraphQLList(UserType),
         args: {
           max: { type: GraphQLFloat },
-          min: { type: GraphQLFloat }
+          min: { type: GraphQLFloat },
+          ascending: { type: GraphQLBoolean }
         },
         resolve(parent, args, context, info) {
-          return userJson.filter(x => x.salary > args.min && x.salary < args.max);
+          return userJson
+            .filter(x => x.salary > args.min && x.salary < args.max)
+            .sort((a, b) => (args.ascending ? a.salary - b.salary : b.salary - a.salary));
+        }
+      }
+    }
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      divide: {
+        type: GraphQLFloat,
+        args: {
+          num1: { type: GraphQLFloat },
+          num2: { type: GraphQLFloat }
+        },
+        resolve(parent, args, context, info) {
+          return args.num1 / args.num2;
+        }
+      },
+      createUser: {
+        type: UserType,
+        args: {
+          input: { type: UserInputType }
+        },
+        async resolve(parent, args, context, info) {
+          let id = userJson.sort((a, b) => b.id - a.id)[0].id;
+          args.input.id = id + 1;
+
+          userJson.push(args.input);
+          let json = JSON.stringify(userJson);
+          await fs.writeFileSync('./data/users.json', json);
+
+          return args.input;
         }
       }
     }

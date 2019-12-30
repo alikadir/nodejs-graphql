@@ -1,7 +1,9 @@
 import { ApolloServer, gql } from 'apollo-server-express';
 import { createComplexityLimitRule } from 'graphql-validation-complexity';
+import cors from 'cors';
 import express from 'express';
 import fetch from 'node-fetch';
+import fs from 'fs';
 
 import { fieldMapResolver } from './utilities/graphql-utility';
 import externalSchema from './schema/sdl-schema';
@@ -28,12 +30,16 @@ const resolvers = {
     singlePost: (parent, args, context, info) => postJson.find(x => x.id == args.id),
     userPosts: (parent, args, context, info) => postJson.filter(x => x.userId == args.userId),
     getPostsByStatus: (parent, args, context, info) => postJson.filter(x => x.status == args.status),
-    getUsersBetweenSalary: (parent, args, context, info) => userJson.filter(x => x.salary > args.min && x.salary < args.max)
+    getUsersBetweenSalary: (parent, args, context, info) =>
+      userJson
+        .filter(x => x.salary > args.min && x.salary < args.max)
+        .sort((a, b) => (args.ascending ? a.salary - b.salary : b.salary - a.salary))
   },
   User: {
     posts: (parent, args, context, info) => postJson.filter(x => x.userId == parent.id),
     comments: (parent, args, context, info) => commentJson.filter(x => x.userId == parent.id),
-    todos: async (parent, args, context, info) => await (await fetch(`https://jsonplaceholder.typicode.com/todos?userId=${parent.id}`)).json()
+    todos: async (parent, args, context, info) =>
+      await (await fetch(`https://jsonplaceholder.typicode.com/todos?userId=${parent.id}`)).json()
   },
   Post: {
     user: (parent, args, context, info) => userJson.find(x => x.id == parent.userId),
@@ -44,14 +50,26 @@ const resolvers = {
     post: (parent, args, context, info) => postJson.find(x => x.id == parent.postId)
   },
   Mutation: {
-    sum: (parent, args, context, info) => args.num1 / args.num2
+    divide: (parent, args, context, info) => args.num1 / args.num2,
+    createUser: async (parent, args, context, info) => {
+      let id = userJson.sort((a, b) => b.id - a.id)[0].id;
+      args.input.id = id + 1;
+
+      userJson.push(args.input);
+      let json = JSON.stringify(userJson);
+      await fs.writeFileSync('./data/users.json', json);
+
+      return args.input;
+    }
   }
 };
 
 const app = express();
+app.use(cors());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // mocks: true,
   context: context => {
     // added isMobile field to context object
     context.isMobile = context.req.headers['user-agent'].includes('iphone');
