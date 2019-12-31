@@ -197,6 +197,14 @@ export default new GraphQLSchema({
             .filter(x => x.salary > args.min && x.salary < args.max)
             .sort((a, b) => (args.ascending ? a.salary - b.salary : b.salary - a.salary));
         }
+      },
+      getUserExceptionThrow: {
+        type: GraphQLList(UserType),
+        resolve(parent, args, context, info) {
+          return args.aaa.bbb.ccc;
+          // return 200 http code and there is "errors" field in result json
+          // there is also other query field's "data" in result json
+        }
       }
     }
   }),

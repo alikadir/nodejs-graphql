@@ -73,6 +73,7 @@ export default gql`
     userPosts(userId: ID): [Post]
     getPostsByStatus(status: Status): [Post]
     getUsersBetweenSalary(max: Float, min: Float, ascending: Boolean): [User]
+    getUserExceptionThrow: [User]
   }
 
   type Mutation {
