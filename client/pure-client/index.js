@@ -25,13 +25,33 @@ const createUserMutation = {
   }
 };
 
-fetch('http://localhost:4000/graphql', {
+const complexQuery = {
+  query: `
+    query {
+      posts {
+        body
+        title
+        user {
+          salary
+          nick
+          todos {
+            id
+            title
+            completed
+          }
+        }
+      }
+    }
+ `
+};
+
+fetch('http://localhost:3000/graphql', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify(createUserMutation)
+  body: JSON.stringify(complexQuery)
 })
   .then(data => data.json())
-  .then(data => console.log('data returned:', data))
+  .then(data => console.log('data returned:', JSON.stringify(data)))
   .catch(err => console.log(err));

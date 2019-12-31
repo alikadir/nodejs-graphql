@@ -8,6 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Pure Server",
+      "cwd": "${workspaceFolder}/server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "pure-server"],
       "restart": true,
@@ -18,6 +19,7 @@
       "type": "node",
       "request": "launch",
       "name": "Apollo Server",
+      "cwd": "${workspaceFolder}/server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "apollo-server"],
       "restart": true,
@@ -28,9 +30,10 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Client",
+      "name": "Pure Client",
+      "cwd": "${workspaceFolder}/client/pure-client",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "client"],
+      "runtimeArgs": ["run", "start"],
       "restart": true,
       "port": 7777,
       "skipFiles": ["<node_internals>/**"]
