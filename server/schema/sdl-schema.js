@@ -79,5 +79,6 @@ export default gql`
   type Mutation {
     divide(num1: Int, num2: Int): Float
     createUser(input: UserInput): User
+    updateUser(userId: ID, input: UserInput): User
   }
 `;

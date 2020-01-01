@@ -65,6 +65,26 @@ const resolvers = {
       await fs.writeFileSync('./data/users.json', json);
 
       return args.input;
+    },
+    updateUser: async (parent, args, context, info) => {
+      let user = userJson.find(x => x.id == args.userId);
+      if (user) {
+        // item changed by reference type in userJson
+        for (const field in user) {
+          user[field] = args.input[field];
+        }
+        user.id = args.userId;
+
+        /*  user = {
+          id: args.userId,
+          ...args.input
+        }; */
+
+        let json = JSON.stringify(userJson);
+        await fs.writeFileSync('./data/users.json', json);
+
+        return user;
+      } else throw 'user not found';
     }
   }
 };
@@ -85,4 +105,4 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-app.listen(4000, () => console.log(` 🚀 Now browse to http://localhost:4000${server.graphqlPath}`));
+app.listen(2000, () => console.log(` 🚀 Now browse to http://localhost:2000${server.graphqlPath}`));

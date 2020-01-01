@@ -90,12 +90,12 @@
     "salary": 34.21
   },
   {
-    "name": "Pure Client",
-    "userName": "pureclient",
-    "nick": "pr",
-    "email": "pr@gmail.com",
+    "name": "Pure Client3",
+    "userName": "pureclient3",
+    "nick": "pr3",
+    "email": "pr3@gmail.com",
     "isMale": false,
-    "salary": 145.33,
-    "id": 11
+    "salary": 123.337,
+    "id": "11"
   }
 ]

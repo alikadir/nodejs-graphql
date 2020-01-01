@@ -236,6 +236,33 @@ export default new GraphQLSchema({
 
           return args.input;
         }
+      },
+      updateUser: {
+        type: UserType,
+        args: {
+          userId: { type: GraphQLID },
+          input: { type: UserInputType }
+        },
+        async resolve(parent, args, context, info) {
+          let user = userJson.find(x => x.id == args.userId);
+          if (user) {
+            // item changed by reference type in userJson
+            for (const field in user) {
+              user[field] = args.input[field];
+            }
+            user.id = args.userId;
+
+            /*  user = {
+              id: args.userId,
+              ...args.input
+            }; */
+
+            let json = JSON.stringify(userJson);
+            await fs.writeFileSync('./data/users.json', json);
+
+            return user;
+          } else throw 'user not found';
+        }
       }
     }
   })
