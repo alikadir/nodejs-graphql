@@ -19,7 +19,9 @@
       "runtimeArgs": ["run", "pure-server"],
       "restart": true,
       "port": 9999,
-      "skipFiles": ["<node_internals>/**"]
+      "skipFiles": ["<node_internals>/**"],
+      "internalConsoleOptions": "openOnSessionStart",
+      "console": "integratedTerminal"
     },
     {
       "type": "node",
@@ -31,7 +33,8 @@
       "restart": true,
       "port": 8888,
       "skipFiles": ["<node_internals>/**"],
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "console": "integratedTerminal"
     },
     {
       "type": "node",

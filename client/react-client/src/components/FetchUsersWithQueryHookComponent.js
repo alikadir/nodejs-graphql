@@ -28,7 +28,7 @@ export default props => {
 
   /*
   const loading = null;
-  const error = 'alivali';
+  const error = 'aliveli';
   const data = { users: [{ name: 'aaa', email: 'aa@aa.com', salary: 23.322 }] };
 */
 

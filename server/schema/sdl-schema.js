@@ -80,5 +80,6 @@ export default gql`
     divide(num1: Int, num2: Int): Float
     createUser(input: UserInput): User
     updateUser(userId: ID, input: UserInput): User
+    deleteUser(userId: ID): Boolean
   }
 `;

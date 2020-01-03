@@ -261,7 +261,22 @@ export default new GraphQLSchema({
             await fs.writeFileSync('./data/users.json', json);
 
             return user;
-          } else throw 'user not found';
+          } else throw 'user not found......';
+        }
+      },
+      deleteUser: {
+        type: GraphQLBoolean,
+        args: {
+          userId: { type: GraphQLID }
+        },
+        async resolve(parent, args, context, info) {
+          let user = userJson.find(x => x.id == args.userId);
+          let index = userJson.indexOf(user);
+          userJson.splice(index, 1);
+          let json = JSON.stringify(userJson);
+          await fs.writeFileSync('./data/users.json', json);
+
+          return true;
         }
       }
     }
