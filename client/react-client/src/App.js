@@ -1,11 +1,19 @@
+import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import React from 'react';
 
-import FetchUsersWithClientComponent from './components/FetchUsersWithClientComponent';
-import FetchUsersWithQueryHookComponent from './components/FetchUsersWithQueryHookComponent';
-import FetchUsersWithQueryComponent from './components/FetchUsersWithQueryComponent';
+import FetchUsersWithClientComponent, {
+  FetchUserWithClientWithoutHookComponent
+} from './components/context-api-client-object/FetchUsersWithClientComponent';
+import CreateUsersWithClientComponent, {
+  CreateUserWithClientWithoutHookComponent
+} from './components/context-api-client-object/CreateUsersWithClientComponent';
+import FetchUsersWithQueryHookComponent from './components/react-hook/FetchUsersWithQueryHookComponent';
+import FetchUsersWithQueryComponent from './components/react-component/FetchUsersWithQueryComponent';
 import SampleComponent from './components/SampleComponent';
+import CollapseComponent from './components/CollapseComponent';
+import CreateUserWithMutationHookComponent from './components/react-hook/CreateUserWithMutationHookComponent';
+import CreateUserWithMutationComponent from './components/react-component/CreateUserWithMutationComponent';
 
 import './App.css';
 import logo from './logo.svg';
@@ -22,13 +30,19 @@ function App() {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+          <CollapseComponent title="Query">
+            <FetchUsersWithQueryHookComponent />
+            <FetchUsersWithQueryComponent />
+            <FetchUsersWithClientComponent />
+            <FetchUserWithClientWithoutHookComponent />
+          </CollapseComponent>
+          <CollapseComponent title="Mutation">
+            <CreateUserWithMutationHookComponent />
+            <CreateUserWithMutationComponent />
+            <CreateUsersWithClientComponent />
+            <CreateUserWithClientWithoutHookComponent />
+          </CollapseComponent>
           <SampleComponent initCount={3} />
-          <FetchUsersWithQueryHookComponent />
-          <FetchUsersWithQueryComponent />
-          <FetchUsersWithClientComponent />
         </header>
       </div>
     </ApolloProvider>

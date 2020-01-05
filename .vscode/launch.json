@@ -57,6 +57,7 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start"],
       "port": 6666,
+      "internalConsoleOptions": "openOnSessionStart",
       "console": "integratedTerminal"
     },
     {

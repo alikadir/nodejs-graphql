@@ -1,8 +1,12 @@
 import fetch from 'node-fetch';
 import readline from 'readline';
 
+import gql from 'graphql-tag';
+
+// using gql is optional !!
+
 const createUserMutation = {
-  query: `
+  query: gql`
     mutation createUser($input: UserInput) {
       createUser(input: $input) {
         id
@@ -13,11 +17,11 @@ const createUserMutation = {
         email
       }
     }
- `,
+  `,
   variables: {
     input: {
       name: 'Pure Client',
-      userName: 'pureclient',
+      userName: 'pure-client',
       nick: 'pr',
       email: 'pr@gmail.com',
       isMale: false,
@@ -27,7 +31,7 @@ const createUserMutation = {
 };
 
 const updateUserMutation = {
-  query: `
+  query: gql`
     mutation updateUser($input: UserInput) {
       updateUser(userId: 11, input: $input) {
         id
@@ -38,11 +42,11 @@ const updateUserMutation = {
         email
       }
     }
-`,
+  `,
   variables: {
     input: {
       name: 'Pure Client Changed',
-      userName: 'pureclient-changed',
+      userName: 'pure-client-changed',
       nick: 'prc',
       email: 'prc@gmail.com',
       isMale: true,
@@ -51,8 +55,16 @@ const updateUserMutation = {
   }
 };
 
+const deleteUserMutation = {
+  query: gql`
+    mutation {
+      deleteUser(userId: 11)
+    }
+  `
+};
+
 const complexQuery = {
-  query: `
+  query: gql`
     query {
       posts {
         body
@@ -68,23 +80,23 @@ const complexQuery = {
         }
       }
     }
- `
+  `
 };
 
 const getUserError = {
-  query: `
-  query {
-    singlePost(id: 3) {
-      id
-      title
+  query: gql`
+    query {
+      singlePost(id: 3) {
+        id
+        title
+      }
+      getUserExceptionThrow {
+        id
+        name
+        nick
+      }
     }
-    getUserExceptionThrow {
-      id
-      name
-      nick
-    }
-  }
- `
+  `
 };
 
 function callGraphqlApi(query) {
@@ -114,6 +126,7 @@ rl.question(
  Which graphql operation do you want to run? 
   - createUserMutation
   - updateUserMutation
+  - deleteUserMutation
   - complexQuery
   - getUserError
 

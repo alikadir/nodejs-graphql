@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "esm": "^3.2.25",
+    "graphql-tag": "^2.10.1",
     "node-fetch": "^2.6.0",
     "nodemon": "^2.0.2"
   }
