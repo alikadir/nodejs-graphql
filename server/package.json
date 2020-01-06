@@ -17,6 +17,7 @@
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.8",
     "graphql-validation-complexity": "^0.2.5",
+    "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {

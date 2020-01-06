@@ -8,7 +8,8 @@ export default props => {
   });
 
   return (
-    <div>
+    <div className="box">
+      <h5>Sample State Component</h5>
       <button onClick={() => setCount(count + 1)}>You clicked {count} times</button>
     </div>
   );

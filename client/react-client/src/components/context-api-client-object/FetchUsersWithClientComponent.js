@@ -32,7 +32,7 @@ export default props => {
 
   return (
     <div className="box">
-      <h5></h5>
+      <h5>Fetch Users With Client Component</h5>
       <ul className="small-text">
         {users.map(x => (
           <li key={x.id}>
@@ -49,7 +49,7 @@ export default props => {
  And can also use following case (Old ContextApi Method) 
 ====================== */
 
-export const FetchUserWithClientWithoutHookComponent = props => {
+export const FetchUserWithClientWithoutHook = props => {
   return (
     <div className="box">
       <ApolloConsumer>

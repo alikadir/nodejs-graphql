@@ -2,18 +2,19 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 
-import FetchUsersWithClientComponent, {
-  FetchUserWithClientWithoutHookComponent
+import FetchUsersWithClient, {
+  FetchUserWithClientWithoutHook
 } from './components/context-api-client-object/FetchUsersWithClientComponent';
-import CreateUsersWithClientComponent, {
-  CreateUserWithClientWithoutHookComponent
+import CreateUsersWithClient, {
+  CreateUserWithClientWithoutHook
 } from './components/context-api-client-object/CreateUsersWithClientComponent';
-import FetchUsersWithQueryHookComponent from './components/react-hook/FetchUsersWithQueryHookComponent';
-import FetchUsersWithQueryComponent from './components/react-component/FetchUsersWithQueryComponent';
-import SampleComponent from './components/SampleComponent';
-import CollapseComponent from './components/CollapseComponent';
-import CreateUserWithMutationHookComponent from './components/react-hook/CreateUserWithMutationHookComponent';
-import CreateUserWithMutationComponent from './components/react-component/CreateUserWithMutationComponent';
+import FetchUsersWithQueryHook from './components/react-hook/FetchUsersWithQueryHookComponent';
+import FetchUsersWithQuery from './components/react-component/FetchUsersWithQueryComponent';
+import SampleState from './components/sample/SampleStateComponent';
+import { SampleFormWithState, SampleFormWithElement } from './components/sample/SampleFormComponent';
+import Collapse from './components/CollapseComponent';
+import CreateUserWithMutationHook from './components/react-hook/CreateUserWithMutationHookComponent';
+import CreateUserWithMutation from './components/react-component/CreateUserWithMutationComponent';
 
 import './App.css';
 import logo from './logo.svg';
@@ -30,19 +31,23 @@ function App() {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <CollapseComponent title="Query">
-            <FetchUsersWithQueryHookComponent />
-            <FetchUsersWithQueryComponent />
-            <FetchUsersWithClientComponent />
-            <FetchUserWithClientWithoutHookComponent />
-          </CollapseComponent>
-          <CollapseComponent title="Mutation">
-            <CreateUserWithMutationHookComponent />
-            <CreateUserWithMutationComponent />
-            <CreateUsersWithClientComponent />
-            <CreateUserWithClientWithoutHookComponent />
-          </CollapseComponent>
-          <SampleComponent initCount={3} />
+          <Collapse title="Sample">
+            <SampleState initCount={3} />
+            <SampleFormWithState />
+            <SampleFormWithElement />
+          </Collapse>
+          <Collapse title="Query">
+            <FetchUsersWithQueryHook />
+            <FetchUsersWithQuery />
+            <FetchUsersWithClient />
+            <FetchUserWithClientWithoutHook />
+          </Collapse>
+          <Collapse title="Mutation">
+            <CreateUserWithMutationHook />
+            <CreateUserWithMutation />
+            <CreateUsersWithClient />
+            <CreateUserWithClientWithoutHook />
+          </Collapse>
         </header>
       </div>
     </ApolloProvider>

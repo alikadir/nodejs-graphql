@@ -62,8 +62,8 @@ export default props => {
           <input
             type="text"
             required
-            ref={node => {
-              nameElm = node;
+            ref={elm => {
+              nameElm = elm;
             }}></input>
         </label>
         <label>
@@ -72,8 +72,8 @@ export default props => {
             type="text"
             required
             pattern="[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*"
-            ref={node => {
-              userNameElm = node;
+            ref={elm => {
+              userNameElm = elm;
             }}></input>
         </label>
         <label>
@@ -82,8 +82,8 @@ export default props => {
             type="text"
             required
             pattern="[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*"
-            ref={node => {
-              nickElm = node;
+            ref={elm => {
+              nickElm = elm;
             }}></input>
         </label>
         <label>
@@ -91,26 +91,26 @@ export default props => {
           <input
             type="email"
             required
-            ref={node => {
-              emailElm = node;
+            ref={elm => {
+              emailElm = elm;
             }}></input>
         </label>
         <label>
           Is Male
           <input
             type="checkbox"
-            ref={node => {
-              isMaleElm = node;
+            ref={elm => {
+              isMaleElm = elm;
             }}></input>
         </label>
         <label>
           Salary
           <input
             type="number"
-            step="0.1"
+            step="0.100"
             required
-            ref={node => {
-              salaryElm = node;
+            ref={elm => {
+              salaryElm = elm;
             }}></input>
         </label>
         <button type="submit">Submit</button>

@@ -1,8 +1,11 @@
 import fetch from 'node-fetch';
 import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
+import { checkAuth } from '../utilities/authentication';
 import { fieldMapResolver } from '../utilities/graphql-utility';
 
+import adminJson from '../data/admins.json';
 import commentJson from '../data/comments.json';
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
@@ -49,7 +52,7 @@ export default {
   },
   Mutation: {
     divide: (parent, args, context, info) => args.num1 / args.num2,
-    createUser: async (parent, args, context, info) => {
+    createUser: checkAuth('admin')(async (parent, args, context, info) => {
       let id = userJson.sort((a, b) => b.id - a.id)[0].id;
       args.input.id = id + 1;
 
@@ -57,9 +60,11 @@ export default {
       let json = JSON.stringify(userJson);
       await fs.writeFileSync('../data/users.json', json);
 
+      console.log(`Admin ${context.admin.userName} created user!`);
+
       return args.input;
-    },
-    updateUser: async (parent, args, context, info) => {
+    }),
+    updateUser: checkAuth('admin')(async (parent, args, context, info) => {
       let user = userJson.find(x => x.id == args.userId);
       if (user) {
         // item changed by reference type in userJson
@@ -76,17 +81,32 @@ export default {
         let json = JSON.stringify(userJson);
         await fs.writeFileSync('./data/users.json', json);
 
+        console.log(`Admin ${context.admin.userName} updated user!`);
+
         return user;
-      } else throw 'user not found';
-    },
-    deleteUser: async (parent, args, context, info) => {
+      } else throw new Error('user not found');
+    }),
+    deleteUser: checkAuth('admin')(async (parent, args, context, info) => {
       let user = userJson.find(x => x.id == args.userId);
+      if (!user) throw new Error('User not found.');
+
       let index = userJson.indexOf(user);
       userJson.splice(index, 1);
       let json = JSON.stringify(userJson);
       await fs.writeFileSync('./data/users.json', json);
 
+      console.log(`Admin ${context.admin.userName} deleted user!`);
+
       return true;
+    }),
+    signIn: (parent, args, context, info) => {
+      const admin = adminJson.find(x => x.userName == args.userName && x.password == args.password);
+      if (admin) {
+        // generate JWT and return token string
+        return jwt.sign(admin, 'AKB_SecretKey', { expiresIn: '30s' });
+      } else {
+        throw new Error('User does not exists!');
+      }
     }
   }
 };

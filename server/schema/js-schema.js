@@ -11,13 +11,17 @@ import {
   GraphQLBoolean,
   GraphQLInputObjectType
 } from 'graphql';
-import { fieldMapResolver } from '../utilities/graphql-utility';
 import fetch from 'node-fetch';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
+import { checkAuth } from '../utilities/authentication';
+import { fieldMapResolver } from '../utilities/graphql-utility';
+
+import adminJson from '../data/admins.json';
 import commentJson from '../data/comments.json';
 import postJson from '../data/posts.json';
 import userJson from '../data/users.json';
-import fs from 'fs';
 
 // !! build in directives which are skip, include aren't using in javascript schema
 // only deprecated directive using as deprecationReason in javascript schema
@@ -143,7 +147,7 @@ export default new GraphQLSchema({
     fields: {
       posts: {
         type: GraphQLList(PostType),
-        resolve(parent, args, context, info) {
+        resolve: (parent, args, context, info) => {
           return postJson;
         }
       },
@@ -226,7 +230,7 @@ export default new GraphQLSchema({
         args: {
           input: { type: UserInputType }
         },
-        async resolve(parent, args, context, info) {
+        resolve: checkAuth('admin')(async (parent, args, context, info) => {
           let id = userJson.sort((a, b) => b.id - a.id)[0].id;
           args.input.id = id + 1;
 
@@ -234,8 +238,10 @@ export default new GraphQLSchema({
           let json = JSON.stringify(userJson);
           await fs.writeFileSync('./data/users.json', json);
 
+          console.log(`Admin ${context.admin.userName} created user!`);
+
           return args.input;
-        }
+        })
       },
       updateUser: {
         type: UserType,
@@ -243,7 +249,7 @@ export default new GraphQLSchema({
           userId: { type: GraphQLID },
           input: { type: UserInputType }
         },
-        async resolve(parent, args, context, info) {
+        resolve: checkAuth('admin')(async (parent, args, context, info) => {
           let user = userJson.find(x => x.id == args.userId);
           if (user) {
             // item changed by reference type in userJson
@@ -260,23 +266,45 @@ export default new GraphQLSchema({
             let json = JSON.stringify(userJson);
             await fs.writeFileSync('./data/users.json', json);
 
+            console.log(`Admin ${context.admin.userName} updated user!`);
+
             return user;
-          } else throw 'user not found......';
-        }
+          } else throw new Error('User not found.');
+        })
       },
       deleteUser: {
         type: GraphQLBoolean,
         args: {
           userId: { type: GraphQLID }
         },
-        async resolve(parent, args, context, info) {
+        resolve: checkAuth('admin')(async (parent, args, context, info) => {
           let user = userJson.find(x => x.id == args.userId);
+          if (!user) throw new Error('User not found.');
+
           let index = userJson.indexOf(user);
           userJson.splice(index, 1);
           let json = JSON.stringify(userJson);
           await fs.writeFileSync('./data/users.json', json);
 
+          console.log(`Admin ${context.admin.userName} deleted user!`);
+
           return true;
+        })
+      },
+      signIn: {
+        type: GraphQLString,
+        args: {
+          userName: { type: new GraphQLNonNull(GraphQLString) },
+          password: { type: new GraphQLNonNull(GraphQLString) }
+        },
+        async resolve(parent, args, context, info) {
+          const admin = adminJson.find(x => x.userName == args.userName && x.password == args.password);
+          if (admin) {
+            // generate JWT and return token string
+            return jwt.sign(admin, 'AKB_SecretKey', { expiresIn: '30s' });
+          } else {
+            throw new Error('User does not exists!');
+          }
         }
       }
     }

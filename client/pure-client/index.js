@@ -1,12 +1,11 @@
 import fetch from 'node-fetch';
 import readline from 'readline';
 
-import gql from 'graphql-tag';
-
 // using gql is optional !!
+// you can string for query schema !!
 
 const createUserMutation = {
-  query: gql`
+  query: `
     mutation createUser($input: UserInput) {
       createUser(input: $input) {
         id
@@ -31,7 +30,7 @@ const createUserMutation = {
 };
 
 const updateUserMutation = {
-  query: gql`
+  query: `
     mutation updateUser($input: UserInput) {
       updateUser(userId: 11, input: $input) {
         id
@@ -56,7 +55,7 @@ const updateUserMutation = {
 };
 
 const deleteUserMutation = {
-  query: gql`
+  query: `
     mutation {
       deleteUser(userId: 11)
     }
@@ -64,7 +63,7 @@ const deleteUserMutation = {
 };
 
 const complexQuery = {
-  query: gql`
+  query: `
     query {
       posts {
         body
@@ -84,7 +83,7 @@ const complexQuery = {
 };
 
 const getUserError = {
-  query: gql`
+  query: `
     query {
       singlePost(id: 3) {
         id
@@ -99,19 +98,39 @@ const getUserError = {
   `
 };
 
+const signInMutation = {
+  query: `
+    mutation($userName: String!, $password: String!) {
+      signIn(userName: $userName, password: $password)
+    }
+  `,
+  variables: {
+    userName: 'alikadir',
+    password: '123abc'
+  }
+};
+
+let headers = {
+  'Content-Type': 'application/json'
+};
+
 function callGraphqlApi(query) {
   // pure-client working with apollo-server
   // apollo-react-client working with pure-server
-  fetch('http://localhost:2000/graphql', {
+  fetch('http://localhost:1000/graphql', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: headers,
     body: JSON.stringify(query)
   })
-    .then(data => data.json())
-    .then(data => console.log('data returned:', JSON.stringify(data)))
-    .catch(err => console.log(err));
+    .then(result => result.json())
+    .then(result => {
+      if (!result.errors && result.data.signIn) headers['Authorization'] = `Bearer ${result.data.signIn}`;
+      console.log('data returned:', JSON.stringify(result));
+    })
+    .catch(err => console.log(err))
+    .finally(() => {
+      recursiveQuestion();
+    });
 }
 
 let rl = readline.createInterface({
@@ -120,20 +139,31 @@ let rl = readline.createInterface({
   terminal: false
 });
 
-rl.question(
-  `
+const recursiveQuestion = () => {
+  rl.question(
+    `
 ============================================
  Which graphql operation do you want to run? 
-  - createUserMutation
-  - updateUserMutation
-  - deleteUserMutation
-  - complexQuery
-  - getUserError
+   - signInMutation 
+   - createUserMutation
+   - updateUserMutation
+   - deleteUserMutation
+   - complexQuery
+   - getUserError
+
+   x - exit
 
 `,
-  answer => {
-    console.log('calling...');
-    callGraphqlApi(eval(answer));
-    rl.close();
-  }
-);
+    answer => {
+      if (answer == 'exit') {
+        rl.close();
+        return;
+      }
+
+      console.log('calling...');
+      callGraphqlApi(eval(answer));
+    }
+  );
+};
+
+recursiveQuestion();

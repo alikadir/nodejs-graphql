@@ -109,7 +109,7 @@ export default props => {
                 Salary
                 <input
                   type="number"
-                  step="0.1"
+                  step="0.100"
                   required
                   ref={node => {
                     salaryElm = node;
