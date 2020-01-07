@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useApolloClient } from 'react-apollo';
 import jwt from 'jsonwebtoken';
 import { gql } from 'apollo-boost';

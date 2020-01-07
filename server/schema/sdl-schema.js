@@ -83,4 +83,8 @@ export default gql`
     deleteUser(userId: ID): Boolean
     signIn(userName: String!, password: String!): String
   }
+
+  type Subscription {
+    createdUser: User
+  }
 `;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
 
 import FetchUsersWithClient, {
   FetchUserWithClientWithoutHook
@@ -16,33 +15,18 @@ import Collapse from './components/CollapseComponent';
 import CreateUserWithMutationHook from './components/react-hook/CreateUserWithMutationHookComponent';
 import CreateUserWithMutation from './components/react-component/CreateUserWithMutationComponent';
 import SingIn from './components/SingInComponent';
+import CreatedUserSubscription from './components/CreatedUserSubscriptionComponent';
+import client from './ApolloClient';
 
 import './App.css';
 import logo from './logo.svg';
-
-const client = new ApolloClient({
-  // pure-client working with apollo-server
-  // apollo-react-client working with pure-server
-  uri: 'http://localhost:1000/graphql',
-
-  // set jwt token at request header
-  request: operation => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      operation.setContext({
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      });
-    }
-  }
-});
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <div className="App">
         <header className="App-header">
+          <CreatedUserSubscription />
           <SingIn />
           <img src={logo} className="App-logo" alt="logo" style={{ display: 'none' }} />
           <Collapse title="Sample">

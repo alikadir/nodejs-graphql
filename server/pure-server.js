@@ -14,6 +14,7 @@ app.use(
   graphqlHTTP((req, res, params) => ({
     schema: externalSchema,
     graphiql: true,
+
     context: {
       // added isMobile field to context object
       isMobile: req.headers['user-agent'].includes('iphone'),

@@ -58,9 +58,12 @@ export default {
 
       userJson.push(args.input);
       let json = JSON.stringify(userJson);
-      await fs.writeFileSync('../data/users.json', json);
+      //await fs.writeFileSync('./data/users.json', json);
 
       console.log(`Admin ${context.admin.userName} created user!`);
+
+      // websocket subscriber fire event
+      context.pubSub.publish('created-user', { createdUser: args.input });
 
       return args.input;
     }),
@@ -106,6 +109,13 @@ export default {
         return jwt.sign(admin, 'AKB_SecretKey', { expiresIn: '30s' });
       } else {
         throw new Error('User does not exists!');
+      }
+    }
+  },
+  Subscription: {
+    createdUser: {
+      subscribe: (parent, args, context, info) => {
+        return context.pubSub.asyncIterator('created-user');
       }
     }
   }
