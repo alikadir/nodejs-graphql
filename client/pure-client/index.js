@@ -117,7 +117,7 @@ let headers = {
 function callGraphqlApi(query) {
   // pure-client working with apollo-server
   // apollo-react-client working with pure-server
-  fetch('http://localhost:1000/graphql', {
+  fetch('http://localhost:2000/graphql', {
     method: 'POST',
     headers: headers,
     body: JSON.stringify(query)

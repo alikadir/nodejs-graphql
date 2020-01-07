@@ -15,6 +15,7 @@ import { SampleFormWithState, SampleFormWithElement } from './components/sample/
 import Collapse from './components/CollapseComponent';
 import CreateUserWithMutationHook from './components/react-hook/CreateUserWithMutationHookComponent';
 import CreateUserWithMutation from './components/react-component/CreateUserWithMutationComponent';
+import SingIn from './components/SingInComponent';
 
 import './App.css';
 import logo from './logo.svg';
@@ -22,7 +23,19 @@ import logo from './logo.svg';
 const client = new ApolloClient({
   // pure-client working with apollo-server
   // apollo-react-client working with pure-server
-  uri: 'http://localhost:1000/graphql'
+  uri: 'http://localhost:1000/graphql',
+
+  // set jwt token at request header
+  request: operation => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      operation.setContext({
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+    }
+  }
 });
 
 function App() {
@@ -30,7 +43,8 @@ function App() {
     <ApolloProvider client={client}>
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+          <SingIn />
+          <img src={logo} className="App-logo" alt="logo" style={{ display: 'none' }} />
           <Collapse title="Sample">
             <SampleState initCount={3} />
             <SampleFormWithState />

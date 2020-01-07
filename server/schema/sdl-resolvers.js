@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 
-import { checkAuth } from '../utilities/authentication';
+import { checkAuth, ROLE } from '../utilities/authentication';
 import { fieldMapResolver } from '../utilities/graphql-utility';
 
 import adminJson from '../data/admins.json';
@@ -52,7 +52,7 @@ export default {
   },
   Mutation: {
     divide: (parent, args, context, info) => args.num1 / args.num2,
-    createUser: checkAuth('admin')(async (parent, args, context, info) => {
+    createUser: checkAuth(ROLE.SUPER_ADMIN)(async (parent, args, context, info) => {
       let id = userJson.sort((a, b) => b.id - a.id)[0].id;
       args.input.id = id + 1;
 
@@ -64,7 +64,7 @@ export default {
 
       return args.input;
     }),
-    updateUser: checkAuth('admin')(async (parent, args, context, info) => {
+    updateUser: checkAuth(ROLE.ADMIN)(async (parent, args, context, info) => {
       let user = userJson.find(x => x.id == args.userId);
       if (user) {
         // item changed by reference type in userJson
@@ -86,7 +86,7 @@ export default {
         return user;
       } else throw new Error('user not found');
     }),
-    deleteUser: checkAuth('admin')(async (parent, args, context, info) => {
+    deleteUser: checkAuth(ROLE.ADMIN)(async (parent, args, context, info) => {
       let user = userJson.find(x => x.id == args.userId);
       if (!user) throw new Error('User not found.');
 

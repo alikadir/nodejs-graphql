@@ -13,9 +13,6 @@ export default props => {
 
   let nameElm, userNameElm, nickElm, emailElm, isMaleElm, salaryElm;
 
-  if (loading) return <p>Loading... {loading}</p>;
-  if (error) return <p>Error :( {error.message}</p>;
-
   return (
     <div className="box">
       <h5>Create User With Client Component</h5>
@@ -129,6 +126,8 @@ export default props => {
         </label>
         <button type="submit">Submit</button>
       </form>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error :( {error.message}</p>}
     </div>
   );
 };

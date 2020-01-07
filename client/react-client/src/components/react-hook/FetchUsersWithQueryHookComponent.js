@@ -16,21 +16,28 @@ const GET_USERS_QUERY = gql`
 `;
 
 export default props => {
-  const { loading, error, data } = useQuery(GET_USERS_QUERY);
+  const { loading, error, data, refetch } = useQuery(GET_USERS_QUERY);
 
-  if (loading) return <p>Loading... {loading}</p>;
-  if (error) return <p>Error :( {error.message}</p>;
   return (
     <div className="box">
       <h5>Fetch Users With Query Hook Component</h5>
       <ul className="small-text">
-        {data.users.map(x => (
-          <li key={x.id}>
-            {x.name} ({x.salary}) - {x.email}
-            <br />
-          </li>
-        ))}
+        {data &&
+          data.users.map(x => (
+            <li key={x.id}>
+              {x.name} ({x.salary}) - {x.email}
+              <br />
+            </li>
+          ))}
       </ul>
+      <button
+        onClick={e => {
+          refetch();
+        }}>
+        Refetch!
+      </button>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error :( {error.message}</p>}
     </div>
   );
 };

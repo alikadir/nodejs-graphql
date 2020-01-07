@@ -15,7 +15,7 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 
-import { checkAuth } from '../utilities/authentication';
+import { checkAuth, ROLE } from '../utilities/authentication';
 import { fieldMapResolver } from '../utilities/graphql-utility';
 
 import adminJson from '../data/admins.json';
@@ -230,7 +230,7 @@ export default new GraphQLSchema({
         args: {
           input: { type: UserInputType }
         },
-        resolve: checkAuth('admin')(async (parent, args, context, info) => {
+        resolve: checkAuth(ROLE.SUPER_ADMIN)(async (parent, args, context, info) => {
           let id = userJson.sort((a, b) => b.id - a.id)[0].id;
           args.input.id = id + 1;
 
@@ -249,7 +249,7 @@ export default new GraphQLSchema({
           userId: { type: GraphQLID },
           input: { type: UserInputType }
         },
-        resolve: checkAuth('admin')(async (parent, args, context, info) => {
+        resolve: checkAuth(ROLE.ADMIN)(async (parent, args, context, info) => {
           let user = userJson.find(x => x.id == args.userId);
           if (user) {
             // item changed by reference type in userJson
@@ -277,7 +277,7 @@ export default new GraphQLSchema({
         args: {
           userId: { type: GraphQLID }
         },
-        resolve: checkAuth('admin')(async (parent, args, context, info) => {
+        resolve: checkAuth(ROLE.ADMIN)(async (parent, args, context, info) => {
           let user = userJson.find(x => x.id == args.userId);
           if (!user) throw new Error('User not found.');
 
