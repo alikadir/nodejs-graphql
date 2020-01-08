@@ -35,7 +35,9 @@ const server = new ApolloServer({
     },
     onDisconnect: (webSocket, context) => {}
   },
-  validationRules: [createComplexityLimitRule(5000)] // default 1000
+  validationRules: [createComplexityLimitRule(5000)], // default 1000
+  introspection: true,
+  playground: true
 });
 
 server.applyMiddleware({ app });
