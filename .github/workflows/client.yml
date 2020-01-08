@@ -16,6 +16,9 @@ jobs:
     - name: Into React App
       run: cd 'client/react-client'
       
+    - name: Npm Install
+      run: npm i
+      
     - name: Build React App
       run: npm run build
       
