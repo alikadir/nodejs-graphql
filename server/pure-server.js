@@ -25,4 +25,6 @@ app.use(
   }))
 );
 
-app.listen(1000, () => console.log('🚀 Now browse to http://localhost:1000/graphql'));
+const PORT = process.env.PORT || 1000;
+
+app.listen(PORT, () => console.log(`🚀 Now browse to http://localhost:${PORT}/graphql`));
