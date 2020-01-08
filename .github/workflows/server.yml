@@ -1,0 +1,27 @@
+name: Server Deploy to Heroku 
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: [macos-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Setup Heroku
+      run: brew tap heroku/brew && brew install heroku
+      
+    - name: Add Heroku Remote     
+      run: git remote add heroku https://heroku:$API_KEY@git.heroku.com/akb-first-graphql-server.git
+      env:
+        API_KEY: ${{ secrets.H_API_KEY }}
+            
+    - name: Server Deploy to Heroku
+      run: git subtree push --prefix server/ heroku master
+    
+      
+ 
+      
+      
