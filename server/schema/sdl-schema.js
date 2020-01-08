@@ -86,5 +86,6 @@ export default gql`
 
   type Subscription {
     createdUser: User
+    serverClock: String
   }
 `;

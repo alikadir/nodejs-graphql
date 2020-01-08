@@ -1,8 +1,8 @@
 # To Learn
 
-[-] what is fragment type and where do use?
+[x] what is fragment type and where do use? (a: only use in client query for make short and more clear query)
 
-[-] subscription
+[x] subscription
 
 [x] reFetch data
 
@@ -10,17 +10,8 @@
 
 [x] dynamically pass parameters to Query and Mutation component
 
-[-] query and mutation with multiple parameters
+[x] query and mutation with multiple parameters
 
-```javascript
-query($userId: String) {
-    getSingleUser(userId: $userId)
-}
-<Query query={GET_SINGLE_USER} variables={{userId: state.userId}}>
-```
+[x] query and mutation with onComplete onError event
 
-[-] query and mutation with onComplete onError event
-
-```javascript
-<Mutation onComplete={e=>{}} onError={e=>{}}>
-```
+[-] apollo fetchMore, subscribeToMore for pagination and live data add to exists state

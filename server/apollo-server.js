@@ -9,6 +9,11 @@ import resolvers from './schema/sdl-resolvers';
 
 const pubSub = new PubSub();
 
+// subscribtion publish server clock
+setInterval(() => {
+  pubSub.publish('server-clock', { serverClock: Date.now() });
+}, 1000);
+
 const app = express();
 app.use(cors());
 
@@ -27,16 +32,8 @@ const server = new ApolloServer({
   subscriptions: {
     onConnect: (connectionParams, webSocket, context) => {
       // request, response ..etc are coming in context
-      console.log('socket onConnect');
-      console.log('onConnect-connectionParams', connectionParams);
-      console.log('onConnect-webSocket', webSocket);
-      console.log('onConnect-context', context);
     },
-    onDisconnect: (webSocket, context) => {
-      console.log('socket onDisconnect');
-      console.log('onDisconnect-webSocket', webSocket);
-      console.log('onDisconnect-context', context);
-    }
+    onDisconnect: (webSocket, context) => {}
   },
   validationRules: [createComplexityLimitRule(5000)] // default 1000
 });

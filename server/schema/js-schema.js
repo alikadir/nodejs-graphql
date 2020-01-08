@@ -151,7 +151,6 @@ export default new GraphQLSchema({
           return postJson;
         }
       },
-
       todos: {
         type: GraphQLList(TodoType),
         async resolve(parent, args, context, info) {

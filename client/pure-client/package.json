@@ -4,7 +4,7 @@
   "description": "",
   "main": "client.js",
   "scripts": {
-    "start": "nodemon --inspect-brk=7777 -r esm index"
+    "start": "node --inspect-brk=7777 -r esm index"
   },
   "author": "",
   "license": "ISC",

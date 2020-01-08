@@ -117,6 +117,11 @@ export default {
       subscribe: (parent, args, context, info) => {
         return context.pubSub.asyncIterator('created-user');
       }
+    },
+    serverClock: {
+      subscribe: (parent, args, context, info) => {
+        return context.pubSub.asyncIterator('server-clock');
+      }
     }
   }
 };

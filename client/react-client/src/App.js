@@ -1,5 +1,5 @@
-import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
+import React from 'react';
 
 import FetchUsersWithClient, {
   FetchUserWithClientWithoutHook
@@ -16,6 +16,7 @@ import CreateUserWithMutationHook from './components/react-hook/CreateUserWithMu
 import CreateUserWithMutation from './components/react-component/CreateUserWithMutationComponent';
 import SingIn from './components/SingInComponent';
 import CreatedUserSubscription from './components/CreatedUserSubscriptionComponent';
+import ServerClock from './components/ServerClockComponent';
 import client from './ApolloClient';
 
 import './App.css';
@@ -26,7 +27,6 @@ function App() {
     <ApolloProvider client={client}>
       <div className="App">
         <header className="App-header">
-          <CreatedUserSubscription />
           <SingIn />
           <img src={logo} className="App-logo" alt="logo" style={{ display: 'none' }} />
           <Collapse title="Sample">
@@ -45,6 +45,10 @@ function App() {
             <CreateUserWithMutation />
             <CreateUsersWithClient />
             <CreateUserWithClientWithoutHook />
+          </Collapse>
+          <Collapse title="Subscription">
+            <ServerClock />
+            <CreatedUserSubscription />
           </Collapse>
         </header>
       </div>
