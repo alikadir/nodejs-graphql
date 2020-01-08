@@ -36,7 +36,7 @@ const server = new ApolloServer({
     onDisconnect: (webSocket, context) => {}
   },
   validationRules: [createComplexityLimitRule(5000)], // default 1000
-  introspection: true,
+  introspection: true, // playground enable production
   playground: true
 });
 
