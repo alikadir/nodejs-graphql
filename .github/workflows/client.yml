@@ -12,9 +12,15 @@ jobs:
       
     - name: Setup Now.sh
       run: npm i -g now
-      
+    
+    - name: path
+      run: pwd
+    
     - name: Into React App
       run: cd 'client/react-client'
+      
+    - name: path
+      run: pwd
       
     - name: Npm Install
       run: npm i
