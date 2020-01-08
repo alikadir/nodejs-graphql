@@ -43,13 +43,13 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 // Create an http link:
 const httpLink = middlewareLink.concat(
   createHttpLink({
-    uri: 'http://localhost:2000/graphql'
+    uri: 'https://akb-first-graphql-server.herokuapp.com/graphql'
   })
 );
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:2000/graphql`,
+  uri: `ws://akb-first-graphql-server.herokuapp.com/graphql`,
   options: {
     reconnect: true
   }
