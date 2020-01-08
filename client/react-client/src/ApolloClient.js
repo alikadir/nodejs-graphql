@@ -49,7 +49,7 @@ const httpLink = middlewareLink.concat(
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://akb-first-graphql-server.herokuapp.com/graphql`,
+  uri: `wss://akb-first-graphql-server.herokuapp.com/graphql`,
   options: {
     reconnect: true
   }
