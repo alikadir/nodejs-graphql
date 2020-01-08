@@ -11,27 +11,22 @@ jobs:
     - uses: actions/checkout@v1
       
     - name: Setup Now.sh
-      run: npm i -g now
-    
-    - name: path
-      run: pwd
-    
-    - name: Into React App
-      run: cd client/react-client
-      
-    - name: path
-      run: pwd
-      
+      run: npm i -g now   
+        
     - name: Npm Install
       run: npm i
+      working-directory: ./client/react-client
       
     - name: Build React App
       run: npm run build
+      working-directory: ./client/react-client
       
     - name: Into Build Folder
       run: cd build
     
     - name: Deploy to Zeit via Now.sh
       run: now --name akb-first-graphql-client --token $ZEIT_TOKEN
+      working-directory: ./client/react-client/build
       env:
         ZEIT_TOKEN: ${{ secrets.ZEIT_TOKEN  }}
+        
