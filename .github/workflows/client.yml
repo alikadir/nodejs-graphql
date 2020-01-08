@@ -1,0 +1,28 @@
+name: Client Deploy to Zeit (Now.sh) 
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: [macos-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+      
+    - name: Setup Now.sh
+      run: npm i -g now
+      
+    - name: Into React App
+      run: cd 'client/react-client'
+      
+    - name: Build React App
+      run: npm run build
+      
+    - name: Into Build Folder
+      run: cd build
+    
+    - name: Deploy to Zeit via Now.sh
+      run: now --name akb-first-graphql-client --token $ZEIT_TOKEN
+      env:
+        ZEIT_TOKEN: ${{ secrets.ZEIT_TOKEN  }}
