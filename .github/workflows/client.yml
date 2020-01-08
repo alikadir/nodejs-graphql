@@ -20,10 +20,7 @@ jobs:
     - name: Build React App
       run: npm run build
       working-directory: ./client/react-client
-      
-    - name: Into Build Folder
-      run: cd build
-    
+       
     - name: Deploy to Zeit via Now.sh
       run: now --name akb-first-graphql-client --token $ZEIT_TOKEN
       working-directory: ./client/react-client/build
