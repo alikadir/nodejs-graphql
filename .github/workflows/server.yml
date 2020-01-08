@@ -14,9 +14,9 @@ jobs:
       run: brew tap heroku/brew && brew install heroku
       
     - name: Add Heroku Remote     
-      run: git remote add heroku https://heroku:$API_KEY@git.heroku.com/akb-first-graphql-server.git
-      env:
-        API_KEY: ${{ secrets.H_API_KEY }}
+      run: git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/akb-first-graphql-server.git
+      env:        
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
             
     - name: Server Deploy to Heroku
       run: git subtree push --prefix server/ heroku master
