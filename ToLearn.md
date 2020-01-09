@@ -14,4 +14,4 @@
 
 [x] query and mutation with onComplete onError event
 
-[-] apollo fetchMore, subscribeToMore for pagination and live data add to exists state
+[-] apollo fetchMore, subscribeToMore, restStore for pagination and live data add to exists state

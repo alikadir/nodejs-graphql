@@ -28,6 +28,15 @@ import { getMainDefinition } from 'apollo-utilities';
 
 import { ApolloClient, InMemoryCache } from 'apollo-boost';
 
+let httpUri, wsUri;
+if (process.env.NODE_ENV === 'development') {
+  httpUri = 'http://localhost:2000/graphql';
+  wsUri = 'ws://localhost:2000/graphql';
+} else if (process.env.NODE_ENV === 'production') {
+  httpUri = 'https://akb-first-graphql-server.herokuapp.com/graphql';
+  wsUri = `wss://akb-first-graphql-server.herokuapp.com/graphql`;
+}
+
 const middlewareLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('jwt');
   if (token) {
@@ -43,13 +52,13 @@ const middlewareLink = new ApolloLink((operation, forward) => {
 // Create an http link:
 const httpLink = middlewareLink.concat(
   createHttpLink({
-    uri: 'https://akb-first-graphql-server.herokuapp.com/graphql'
+    uri: httpUri
   })
 );
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `wss://akb-first-graphql-server.herokuapp.com/graphql`,
+  uri: wsUri,
   options: {
     reconnect: true
   }

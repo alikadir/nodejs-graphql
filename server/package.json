@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "apollo-server": "node --inspect-brk=8888 -r esm apollo-server",
-    "pure-server": "node--inspect-brk=9999 -r esm pure-server",
+    "pure-server": "node --inspect-brk=9999 -r esm pure-server",
     "start": "node -r esm apollo-server"
   },
   "author": "",
