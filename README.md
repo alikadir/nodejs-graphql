@@ -10,4 +10,5 @@
 
 ```ncc build pure-server.js```
 
-it is gonna create index.js in build folder which is bundled all dependency for pure-server.js  
+it is gonna create index.js in build folder which is bundled all dependency for pure-server.js 
+
