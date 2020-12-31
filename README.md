@@ -1,3 +1,5 @@
+## All of GraphQL features've been implemented in this project
+
 The Project has twice approach 
 1) using pure javascript client - server 
 2) using Apollo graphql library client - server
